@@ -32,10 +32,22 @@ pipeline {
                         id: 'jacoco', name: 'JaCoCo Coverage',
                         sourceCodeRetention: 'EVERY_BUILD',
                         qualityGates: [
-                                [threshold: 60.0, metric: 'LINE', baseline: 'PROJECT', unstable: true],
-                                [threshold: 60.0, metric: 'BRANCH', baseline: 'PROJECT', unstable: true]])
+                                [threshold: 70.0, metric: 'LINE', baseline: 'PROJECT', unstable: false],
+                                [threshold: 70.0, metric: 'BRANCH', baseline: 'PROJECT', unstable: false]])
 
+                    step([$class: 'GitHubCommitStatusSetter',
+                        statusResultSource: [
+                            $class: 'ConditionalStatusResultSource',
+                            results: [
+                                [buildState: 'SUCCESS', result: 'SUCCESS'],
+                                [buildState: 'FAILURE', result: 'FAILURE']
+                            ]
+                        ],
+                        reposSource: [$class: 'ManuallyEnteredRepositorySource', url: 'https://github.com/pinkWar123/spring-petclinic-microservices.git'],
+                        contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'Coverage']
+                    ])
 
+                    publishChecks name: 'Coverage', summary: "Coverage is ${env.COVERAGE}%"
                 }
             }
         }
