@@ -35,17 +35,42 @@ pipeline {
                                 [threshold: 70.0, metric: 'LINE', baseline: 'PROJECT', unstable: false],
                                 [threshold: 70.0, metric: 'BRANCH', baseline: 'PROJECT', unstable: false]])
 
-                    step([$class: 'GitHubCommitStatusSetter',
+                    step([
+                        $class: 'GitHubCommitStatusSetter',
+                        reposSource: [
+                            $class: 'ManuallyEnteredRepositorySource', 
+                            url: 'https://github.com/your-org/your-repo'
+                        ],
+                        contextSource: [
+                            $class: 'ManuallyEnteredCommitContextSource', 
+                            context: 'Coverage'
+                        ],
                         statusResultSource: [
                             $class: 'ConditionalStatusResultSource',
                             results: [
-                                [buildState: 'SUCCESS', result: 'SUCCESS'],
-                                [buildState: 'FAILURE', result: 'FAILURE']
+                            // For ANY build result, set the commit status to SUCCESS
+                            [
+                                $class: 'AnyBuildResult', 
+                                state: 'SUCCESS', 
+                                message: 'All builds pass'
+                            ],
+                            // For UNSTABLE builds, set commit status to FAILURE
+                            [
+                                $class: 'BetterBuildResult', 
+                                result: 'UNSTABLE', 
+                                state: 'FAILURE', 
+                                message: 'Coverage below threshold'
+                            ],
+                            // For FAILED builds, set commit status to FAILURE
+                            [
+                                $class: 'FailedBuildResult', 
+                                state: 'FAILURE', 
+                                message: 'Build failed'
                             ]
-                        ],
-                        reposSource: [$class: 'ManuallyEnteredRepositorySource', url: 'https://github.com/pinkWar123/spring-petclinic-microservices.git'],
-                        contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'Coverage']
-                    ])
+                            ]
+                        ]
+                        ])
+
 
                     publishChecks name: 'Coverage', summary: "Coverage is ${env.COVERAGE}%"
                 }
