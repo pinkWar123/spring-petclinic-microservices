@@ -38,38 +38,38 @@ pipeline {
                     step([
                         $class: 'GitHubCommitStatusSetter',
                         reposSource: [
-                            $class: 'ManuallyEnteredRepositorySource', 
+                            $class: 'ManuallyEnteredRepositorySource',
                             url: 'https://github.com/your-org/your-repo'
                         ],
                         contextSource: [
-                            $class: 'ManuallyEnteredCommitContextSource', 
+                            $class: 'ManuallyEnteredCommitContextSource',
                             context: 'Coverage'
                         ],
                         statusResultSource: [
                             $class: 'ConditionalStatusResultSource',
                             results: [
-                            // For ANY build result, set the commit status to SUCCESS
+                            // For stable builds, set SUCCESS
                             [
-                                $class: 'AnyBuildResult', 
-                                state: 'SUCCESS', 
-                                message: 'All builds pass'
+                                $class: 'StableBuildResult',
+                                state: 'SUCCESS',
+                                message: 'All builds pass!'
                             ],
-                            // For UNSTABLE builds, set commit status to FAILURE
+                            // For unstable builds, set FAILURE
                             [
-                                $class: 'BetterBuildResult', 
-                                result: 'UNSTABLE', 
-                                state: 'FAILURE', 
+                                $class: 'UnstableBuildResult',
+                                state: 'FAILURE',
                                 message: 'Coverage below threshold'
                             ],
-                            // For FAILED builds, set commit status to FAILURE
+                            // For failed builds, set FAILURE
                             [
-                                $class: 'FailedBuildResult', 
-                                state: 'FAILURE', 
-                                message: 'Build failed'
+                                $class: 'FailedBuildResult',
+                                state: 'FAILURE',
+                                message: 'Build failed!'
                             ]
                             ]
                         ]
                         ])
+
 
 
                     publishChecks name: 'Coverage', summary: "Coverage is ${env.COVERAGE}%"
