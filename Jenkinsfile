@@ -82,10 +82,10 @@ pipeline {
 
         stage('Build & Test Customers Service') {
             agent { label 'customers-agent' }
-            when { changeset "**/spring-petclinic-customers-service/**" }
+            when { changeset "**/spring-petclinic-customers-service/**/*" }
             steps {
                 checkout scm
-                bat 'mvn -pl spring-petclinic-customers-service -am clean test jacoco:report'
+                bat 'mvn -pl spring-petclinic-customers-service -am clean package'
             }
             post {
                 always {
