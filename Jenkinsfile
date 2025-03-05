@@ -1,5 +1,13 @@
 pipeline {
     agent none  // We'll define an agent per stage instead
+    environment {
+        // Ensure Windows system commands can be found
+        PATH = "C:\\Windows\\System32;${env.PATH}"
+    }
+
+    tools {
+        maven "M3" // Ensure this matches your Maven installation configured in Jenkins
+    }
 
     stages {
         stage('Build & Test Admin Server') {
