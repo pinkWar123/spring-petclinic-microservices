@@ -124,7 +124,7 @@ pipeline {
 
         stage('Build & Test GenAI Service') {
             agent { label 'genai-agent' }
-            when { changeset "**/spring-petclinic-genai-service/**" }
+            when { changeset "**/spring-petclinic-genai-service/**/*" }
             steps {
                 checkout scm
                 bat 'mvn -pl spring-petclinic-genai-service -am clean test jacoco:report'
