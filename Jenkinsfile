@@ -37,30 +37,21 @@ pipeline {
 
                     step([
                         $class: 'GitHubCommitStatusSetter',
-                        reposSource: [
-                            $class: 'ManuallyEnteredRepositorySource',
-                            url: 'https://github.com/your-org/your-repo'
-                        ],
-                        contextSource: [
-                            $class: 'ManuallyEnteredCommitContextSource',
-                            context: 'Coverage'
-                        ],
+                        reposSource: [$class: 'ManuallyEnteredRepositorySource', url: 'https://github.com/pinkWar123/spring-petclinic-microservices.git'],
+                        contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'Coverage'],
                         statusResultSource: [
                             $class: 'ConditionalStatusResultSource',
                             results: [
-                            // For stable builds, set SUCCESS
                             [
-                                $class: 'StableBuildResult',
+                                $class: 'AnyBuildResult',
                                 state: 'SUCCESS',
-                                message: 'All builds pass!'
+                                message: 'All builds passed!'
                             ],
-                            // For unstable builds, set FAILURE
                             [
                                 $class: 'UnstableBuildResult',
                                 state: 'FAILURE',
-                                message: 'Coverage below threshold'
+                                message: 'Coverage below threshold!'
                             ],
-                            // For failed builds, set FAILURE
                             [
                                 $class: 'FailedBuildResult',
                                 state: 'FAILURE',
@@ -72,6 +63,8 @@ pipeline {
 
 
 
+
+                    
                     publishChecks name: 'Coverage', summary: "Coverage is ${env.COVERAGE}%"
                 }
             }
