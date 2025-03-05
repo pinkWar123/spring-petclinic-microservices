@@ -91,7 +91,7 @@ pipeline {
                 always {
                     junit '**/spring-petclinic-customers-service/target/surefire-reports/*.xml'
                     recordCoverage(
-                        tools: [[parser: 'JACOCO', pattern: '**/spring-petclinic-customers-service/target/site/jacoco/jacoco.xml']],
+                        tools: [[parser: 'JACOCO']],
                         qualityGates: [
                             [threshold: 70.0, metric: 'LINE', baseline: 'PROJECT', unstable: false],
                             [threshold: 70.0, metric: 'BRANCH', baseline: 'PROJECT', unstable: false]
