@@ -1,5 +1,5 @@
 pipeline {
-    agent any 
+    agent any      
 
     environment {
         // Ensure Windows system commands can be found
