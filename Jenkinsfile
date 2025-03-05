@@ -1,12 +1,8 @@
+
 pipeline {
     agent none  // We'll define an agent per stage instead
     environment {
         // Ensure Windows system commands can be found
-        PATH = "C:\\Windows\\System32;${env.PATH}"
-    }
-
-    tools {
-        maven "M3" // Ensure this matches your Maven installation configured in Jenkins
     }
 
     stages {
@@ -19,7 +15,7 @@ pipeline {
                 checkout scm
 
                 // Build & test only the admin server module (plus any dependencies)
-                bat 'mvn -pl spring-petclinic-admin-server -am clean test jacoco:report'
+                sh 'mvn -pl spring-petclinic-admin-server -am clean test jacoco:report'
             }
             post {
                 always {
