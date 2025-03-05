@@ -127,7 +127,7 @@ pipeline {
             when { changeset "**/spring-petclinic-genai-service/**/*" }
             steps {
                 checkout scm
-                bat 'mvn -pl spring-petclinic-genai-service -am clean'
+                bat 'mvn -pl spring-petclinic-genai-service -am clean package'
             }
             post {
                 success {

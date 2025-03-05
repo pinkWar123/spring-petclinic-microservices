@@ -35,4 +35,4 @@ public class AIBeanConfiguration {
     }
 }
 
-// Add comment in genai service ahihi tiep tuc thay doi ne gfgfddfdbcccvcvcv
+// Add comment in genai service ahihi tiep tuc thay doi ne gfgfddfdbcccvcvcvjkbjkjkbkjjk
