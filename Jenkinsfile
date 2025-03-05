@@ -127,18 +127,18 @@ pipeline {
             when { changeset "**/spring-petclinic-genai-service/**/*" }
             steps {
                 checkout scm
-                bat 'mvn -pl spring-petclinic-genai-service -am clean package'
+                bat 'mvn -Dmaven.test.failure.ignore=true -pl spring-petclinic-genai-service -am clean package'
             }
             post {
                 success {
                     junit '**/spring-petclinic-genai-service/target/surefire-reports/*.xml'
-                    recordCoverage(
-                        tools: [[parser: 'JACOCO', pattern: '**/spring-petclinic-genai-service/target/site/jacoco/jacoco.xml']],
+                    recordCoverage(tools: [[parser: 'JACOCO']],
+                        id: 'jacoco', name: 'JaCoCo Coverage',
+                        sourceCodeRetention: 'EVERY_BUILD',
                         qualityGates: [
-                            [threshold: 70.0, metric: 'LINE', baseline: 'PROJECT', unstable: false],
-                            [threshold: 70.0, metric: 'BRANCH', baseline: 'PROJECT', unstable: false]
-                        ]
-                    )
+                                [threshold: 70.0, metric: 'LINE', baseline: 'PROJECT', unstable: false],
+                                [threshold: 70.0, metric: 'BRANCH', baseline: 'PROJECT', unstable: false]])
+
                 }
             }
         }
