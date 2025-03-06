@@ -1,6 +1,9 @@
 package org.springframework.samples.petclinic.customers.web;
 
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -30,6 +33,7 @@ import org.springframework.samples.petclinic.customers.web.PetRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -137,13 +141,19 @@ class PetResourceTest {
         // Loại bỏ dấu nháy đầu và cuối
         expectedBirthDate = expectedBirthDate.substring(1, expectedBirthDate.length()-1);
 
-        mvc.perform(post("/owners/1/pets")
+        MvcResult result = mvc.perform(post("/owners/1/pets")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(petRequest)))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.id").value(100))
             .andExpect(jsonPath("$.name").value("Buddy"))
-            .andExpect(jsonPath("$.birthDate").value(expectedBirthDate));
+            .andExpect(jsonPath("$.birthDate").value(expectedBirthDate))
+            .andReturn();
+
+        // Sử dụng equals để so sánh đối tượng Pet trả về với savedPet
+        String json = result.getResponse().getContentAsString();
+        Pet returnedPet = objectMapper.readValue(json, Pet.class);
+        assertFalse(returnedPet.equals(savedPet), "Returned pet should not be equal to saved pet");
     }
 
     // --- Test cho endpoint POST /owners/{ownerId}/pets khi owner không tồn tại
