@@ -128,4 +128,4 @@ public class OwnerResourceTest {
                 .andExpect(status().isNoContent());
     }
 }
-// test
+// trigger jenkin
