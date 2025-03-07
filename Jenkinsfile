@@ -97,6 +97,7 @@ pipeline {
                             [threshold: 70.0, metric: 'BRANCH', baseline: 'PROJECT', unstable: false]
                         ]
                     )
+                    archiveArtifacts artifacts: '**/target/surefire-reports/*.xml', allowEmptyArchive: true
                 }
             }
         }
@@ -145,42 +146,44 @@ pipeline {
 
         stage('Build & Test Vets Service') {
             agent { label 'vets-agent' }
-            when { changeset "**/spring-petclinic-vets-service/**" }
+            when { changeset "**/spring-petclinic-vets-service/**/*" }
             steps {
                 checkout scm
-                bat 'mvn -pl spring-petclinic-vets-service -am clean test jacoco:report'
+                bat 'mvn -pl spring-petclinic-vets-service -am clean package'
             }
             post {
                 always {
                     junit '**/spring-petclinic-vets-service/target/surefire-reports/*.xml'
                     recordCoverage(
-                        tools: [[parser: 'JACOCO', pattern: '**/spring-petclinic-vets-service/target/site/jacoco/jacoco.xml']],
+                        tools: [[parser: 'JACOCO']],
                         qualityGates: [
                             [threshold: 70.0, metric: 'LINE', baseline: 'PROJECT', unstable: false],
                             [threshold: 70.0, metric: 'BRANCH', baseline: 'PROJECT', unstable: false]
                         ]
                     )
+                    archiveArtifacts artifacts: '**/target/surefire-reports/*.xml', allowEmptyArchive: true
                 }
             }
         }
 
         stage('Build & Test Visits Service') {
             agent { label 'visits-agent' }
-            when { changeset "**/spring-petclinic-visits-service/**" }
+            when { changeset "**/spring-petclinic-visits-service/**/*" }
             steps {
                 checkout scm
-                bat 'mvn -pl spring-petclinic-visits-service -am clean test jacoco:report'
+                bat 'mvn -pl spring-petclinic-visits-service -am clean package'
             }
             post {
                 always {
                     junit '**/spring-petclinic-visits-service/target/surefire-reports/*.xml'
                     recordCoverage(
-                        tools: [[parser: 'JACOCO', pattern: '**/spring-petclinic-visits-service/target/site/jacoco/jacoco.xml']],
+                        tools: [[parser: 'JACOCO']],
                         qualityGates: [
                             [threshold: 70.0, metric: 'LINE', baseline: 'PROJECT', unstable: false],
                             [threshold: 70.0, metric: 'BRANCH', baseline: 'PROJECT', unstable: false]
                         ]
                     )
+                    archiveArtifacts artifacts: '**/target/surefire-reports/*.xml', allowEmptyArchive: true
                 }
             }
         }
