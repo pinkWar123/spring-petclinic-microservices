@@ -32,7 +32,7 @@ public class VetResourceTest {
 
     @MockBean
     private VetRepository vetRepository;
-
+// Just a comment
     // Test 1: Khi có danh sách bác sĩ (vets) và kiểm tra dữ liệu trả về
     @Test
     void shouldReturnListOfVets() throws Exception {
