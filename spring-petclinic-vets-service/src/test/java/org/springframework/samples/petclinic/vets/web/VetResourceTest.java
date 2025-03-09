@@ -60,5 +60,5 @@ public class VetResourceTest {
             .andExpect(jsonPath("$[1].lastName").value("Doe"));
     }
 
-
+// This is a comment
 }
