@@ -2,7 +2,7 @@ package org.springframework.samples.petclinic.customers.web;
 
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
-
+// comment
 public record OwnerRequest(@NotBlank String firstName,
                            @NotBlank String lastName,
                            @NotBlank String address,
