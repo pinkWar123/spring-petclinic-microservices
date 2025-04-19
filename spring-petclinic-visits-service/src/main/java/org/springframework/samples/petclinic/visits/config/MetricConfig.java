@@ -5,7 +5,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+// changes 12345
 @Configuration
 public class MetricConfig {
 
